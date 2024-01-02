@@ -46,6 +46,8 @@ export class OrdersService {
   }
 
   async getAll() {
-    return this.ordersRepository.findAll();
+    return this.ordersRepository.findAll({
+      order: [['createdAt', 'DESC']],
+    });
   }
 }

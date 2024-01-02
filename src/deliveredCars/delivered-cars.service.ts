@@ -40,7 +40,9 @@ export class DeliveredCarsService {
   }
 
   async getAll() {
-    return this.deliveredCarsRepository.findAll();
+    return this.deliveredCarsRepository.findAll({
+      order: [['createdAt', 'DESC']],
+    });
   }
 
   async getAllFowShow() {
@@ -48,6 +50,7 @@ export class DeliveredCarsService {
       where: {
         show: true,
       },
+      order: [['createdAt', 'DESC']],
     });
   }
 }

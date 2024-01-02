@@ -48,11 +48,16 @@ export class ReviewsService {
   }
 
   async getLastFive() {
-    return this.reviewsRepository.findAll({ limit: 5 });
+    return this.reviewsRepository.findAll({
+      limit: 5,
+      order: [['createdAt', 'DESC']],
+    });
   }
 
   async getAll() {
-    return this.reviewsRepository.findAll();
+    return this.reviewsRepository.findAll({
+      order: [['createdAt', 'DESC']],
+    });
   }
 
   async deleteReview(id: number) {
