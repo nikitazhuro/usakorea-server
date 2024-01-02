@@ -10,6 +10,9 @@ import { OrdersModule } from './orders/orders.module';
 import { OrdersModel } from './orders/orders.model';
 import { ReviewsModule } from './reviews/reviews.module';
 import { ReviewsModel } from './reviews/reviews.model';
+import { FileModule } from './file/file.module';
+import { DeliveredCarsModel } from './deliveredCars/delivered-cars.model';
+import { DeliveredCarsModule } from './deliveredCars/delivered-cars.module';
 
 @Module({
   imports: [
@@ -20,7 +23,7 @@ import { ReviewsModel } from './reviews/reviews.model';
       username: 'postgres',
       password: 'root',
       database: 'usakorea',
-      models: [UserModel, OrdersModel, ReviewsModel],
+      models: [UserModel, OrdersModel, ReviewsModel, DeliveredCarsModel],
       autoLoadModels: true,
     }),
     ServeStaticModule.forRoot({
@@ -30,6 +33,8 @@ import { ReviewsModel } from './reviews/reviews.model';
     AuthModule,
     OrdersModule,
     ReviewsModule,
+    FileModule,
+    DeliveredCarsModule,
   ],
   controllers: [],
   providers: [],
