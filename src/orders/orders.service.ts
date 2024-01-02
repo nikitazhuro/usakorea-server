@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import axios from 'axios';
+import dayjs from 'dayjs';
+
 import { OrdersModel } from './orders.model';
 
 @Injectable()
@@ -21,6 +24,7 @@ export class OrdersService {
 
     if (!existOrder) {
       await this.ordersRepository.create(config);
+      this.sendMessageToAll({ name, number });
     }
   }
   async updateOrder({
@@ -43,6 +47,31 @@ export class OrdersService {
     }
 
     await order.save();
+  }
+
+  async sendMessageToAll({ name, number }) {
+    const secret = '6918841607:AAGCWW_MGrx3K_NTN5J3WxrxpYIt3g9rhBg';
+    const chatsIds = [1715992777, 323934151, 298938846];
+
+    const fields = [
+      `<b>Имя</b>: ${name}`,
+      `<b>Номер</b>: ${number}`,
+      `<b>Заявка от:</b> ${dayjs().format('DD.MM.YY, HH:mm')}`,
+    ];
+    let msg = '';
+    fields.forEach((field) => {
+      msg += field + '\n';
+    });
+
+    msg = encodeURI(msg);
+
+    for (let i = 0; i < chatsIds.length; i++) {
+      const id = chatsIds[i];
+
+      await axios.post(
+        `https://api.telegram.org/bot${secret}/sendMessage?chat_id=${id}&parse_mode=html&text=${msg}`,
+      );
+    }
   }
 
   async getAll() {

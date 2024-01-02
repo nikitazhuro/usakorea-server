@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { TelegrafModule } from 'nestjs-telegraf';
 
 import { UserModel } from './user/user.model';
 import { UserModule } from './user/user.module';
@@ -13,6 +14,7 @@ import { ReviewsModel } from './reviews/reviews.model';
 import { FileModule } from './file/file.module';
 import { DeliveredCarsModel } from './deliveredCars/delivered-cars.model';
 import { DeliveredCarsModule } from './deliveredCars/delivered-cars.module';
+import { BotUpdate } from './bot/bot.update';
 
 @Module({
   imports: [
@@ -29,6 +31,9 @@ import { DeliveredCarsModule } from './deliveredCars/delivered-cars.module';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'static'),
     }),
+    TelegrafModule.forRoot({
+      token: '6918841607:AAGCWW_MGrx3K_NTN5J3WxrxpYIt3g9rhBg',
+    }),
     UserModule,
     AuthModule,
     OrdersModule,
@@ -37,6 +42,6 @@ import { DeliveredCarsModule } from './deliveredCars/delivered-cars.module';
     DeliveredCarsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [BotUpdate],
 })
 export class AppModule {}
