@@ -32,7 +32,6 @@
     "cookie-parser": "^1.4.6",
     "dayjs": "^1.11.10",
     "lodash": "^4.17.21",
-    "nestjs-telegraf": "^2.7.0",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
