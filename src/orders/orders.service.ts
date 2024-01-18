@@ -24,22 +24,26 @@ export class OrdersService {
     userComment: string;
     budget: string;
   }) {
-    const config = {
-      name,
-      number,
-      comment: '',
-      userComment: userComment || '',
-      budget: budget || '',
-      complete: false,
-    };
+    try {
+      const config = {
+        name,
+        number,
+        comment: '',
+        userComment: userComment || '',
+        budget: budget || '',
+        complete: false,
+      };
 
-    const existOrder = await this.ordersRepository.findOne({
-      where: { number },
-    });
+      const existOrder = await this.ordersRepository.findOne({
+        where: { number },
+      });
 
-    if (!existOrder) {
-      await this.ordersRepository.create(config);
-      this.sendMessageToAll({ name, number, userComment, budget });
+      if (!existOrder) {
+        await this.ordersRepository.create(config);
+        this.sendMessageToAll({ name, number, userComment, budget });
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
   async updateOrder({
