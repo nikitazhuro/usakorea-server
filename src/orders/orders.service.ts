@@ -5,6 +5,9 @@ import * as dayjs from 'dayjs';
 
 import { OrdersModel } from './orders.model';
 
+const secret = '6918841607:AAGCWW_MGrx3K_NTN5J3WxrxpYIt3g9rhBg';
+const chatsIds = [1715992777, 323934151, 298938846];
+
 @Injectable()
 export class OrdersService {
   constructor(
@@ -62,37 +65,38 @@ export class OrdersService {
   }
 
   async sendMessageToAll({ name, number, userComment, budget }) {
-    const secret = '6918841607:AAGCWW_MGrx3K_NTN5J3WxrxpYIt3g9rhBg';
-    const chatsIds = [1715992777, 323934151, 298938846];
+    try {
+      const fields = [`<b>Имя</b>: ${name}`, `<b>Номер</b>: ${number}`];
 
-    const fields = [`<b>Имя</b>: ${name}`, `<b>Номер</b>: ${number}`];
+      if (budget) {
+        fields.push(`<b>Бюджет</b>: ${budget}`);
+      }
 
-    if (budget) {
-      fields.push(`<b>Бюджет</b>: ${budget}`);
-    }
+      if (userComment) {
+        fields.push(`<b>Комментарий</b>: ${userComment}`);
+      }
 
-    if (userComment) {
-      fields.push(`<b>Комментарий</b>: ${userComment}`);
-    }
+      const date = dayjs().format('DD.MM.YY, HH:mm');
 
-    const date = dayjs().format('DD.MM.YY, HH:mm');
+      fields.push(`<b>Заявка от:</b> ${date}`);
 
-    fields.push(`<b>Заявка от:</b> ${date}`);
+      let msg = '';
+      fields.forEach((field) => {
+        msg += field + '\n';
+      });
 
-    let msg = '';
-    fields.forEach((field) => {
-      msg += field + '\n';
-    });
+      console.log(msg, 'msg');
 
-    console.log(msg, 'msg');
+      msg = encodeURI(msg);
 
-    msg = encodeURI(msg);
-
-    for (let i = 0; i < chatsIds.length; i++) {
-      const id = chatsIds[i];
-      await axios.post(
-        `https://api.telegram.org/bot${secret}/sendMessage?chat_id=${id}&parse_mode=html&text=${msg}`,
-      );
+      for (let i = 0; i < chatsIds.length; i++) {
+        const id = chatsIds[i];
+        await axios.post(
+          `https://api.telegram.org/bot${secret}/sendMessage?chat_id=${id}&parse_mode=html&text=${msg}`,
+        );
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
