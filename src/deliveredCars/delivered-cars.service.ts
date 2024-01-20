@@ -50,7 +50,8 @@ export class DeliveredCarsService {
       where: {
         show: true,
       },
-      order: [['createdAt', 'DESC']],
+      limit: 10,
+      order: [['updatedAt', 'DESC']],
     });
   }
 }

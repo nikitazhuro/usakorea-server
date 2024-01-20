@@ -49,7 +49,7 @@ export class ReviewsService {
 
   async getLastFive() {
     return this.reviewsRepository.findAll({
-      limit: 5,
+      limit: 10,
       order: [['createdAt', 'DESC']],
     });
   }
