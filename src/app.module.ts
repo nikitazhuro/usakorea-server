@@ -13,6 +13,8 @@ import { ReviewsModel } from './reviews/reviews.model';
 import { FileModule } from './file/file.module';
 import { DeliveredCarsModel } from './deliveredCars/delivered-cars.model';
 import { DeliveredCarsModule } from './deliveredCars/delivered-cars.module';
+import { UsersReviewsModel } from './users-reviews/users-reviews.model';
+import { UsersReviewsModule } from './users-reviews/users-reviews.module';
 
 @Module({
   imports: [
@@ -23,7 +25,13 @@ import { DeliveredCarsModule } from './deliveredCars/delivered-cars.module';
       username: 'postgres',
       password: 'root',
       database: 'usakorea',
-      models: [UserModel, OrdersModel, ReviewsModel, DeliveredCarsModel],
+      models: [
+        UserModel,
+        OrdersModel,
+        ReviewsModel,
+        DeliveredCarsModel,
+        UsersReviewsModel,
+      ],
       autoLoadModels: true,
     }),
     ServeStaticModule.forRoot({
@@ -35,6 +43,7 @@ import { DeliveredCarsModule } from './deliveredCars/delivered-cars.module';
     ReviewsModule,
     FileModule,
     DeliveredCarsModule,
+    UsersReviewsModule,
   ],
   controllers: [],
   providers: [],
