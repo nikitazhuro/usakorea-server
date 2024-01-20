@@ -50,13 +50,13 @@ export class ReviewsService {
   async getLastFive() {
     return this.reviewsRepository.findAll({
       limit: 10,
-      order: [['createdAt', 'DESC']],
+      order: [['date', 'DESC']],
     });
   }
 
   async getAll() {
     return this.reviewsRepository.findAll({
-      order: [['createdAt', 'DESC']],
+      order: [['date', 'DESC']],
     });
   }
 
