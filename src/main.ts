@@ -9,7 +9,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.enableCors({
     credentials: true,
-    origin: true,
+    origin: ['https://admin.autosaya.by', 'https://autosaya.by'],
   });
 
   await app.listen(5000);
