@@ -6,7 +6,7 @@ import * as dayjs from 'dayjs';
 import { OrdersModel } from './orders.model';
 
 const secret = '6918841607:AAGCWW_MGrx3K_NTN5J3WxrxpYIt3g9rhBg';
-const chatsIds = [1715992777, 323934151, 298938846, 131115368];
+const chatsIds = [1715992777, 323934151, 298938846, 1331115368];
 
 @Injectable()
 export class OrdersService {
