@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
+import { sendErrorToSentry } from 'src/utils';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -36,6 +37,8 @@ export class JwtAuthGuard implements CanActivate {
       return true;
     } catch (error) {
       console.log(error);
+      sendErrorToSentry('auth error', error?.message);
+
       throw new HttpException(
         'В авторизации отказано',
         HttpStatus.UNAUTHORIZED,

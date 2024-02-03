@@ -6,6 +6,7 @@ import * as bcrypt from 'bcryptjs';
 import { UserCreateDto } from 'src/user/dto/user-create.dto';
 import { UserService } from 'src/user/user.service';
 import { UserModel } from 'src/user/user.model';
+import { sendErrorToSentry } from 'src/utils';
 
 @Injectable()
 export class AuthService {
@@ -14,22 +15,27 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
   async login(userDto: UserCreateDto) {
-    const user = await this.userService.getUserByEmail(userDto);
+    try {
+      const user = await this.userService.getUserByEmail(userDto);
 
-    if (isEmpty(user)) {
-      throw new HttpException(
-        'Данного юзера не существует',
-        HttpStatus.BAD_REQUEST,
-      );
+      if (isEmpty(user)) {
+        throw new HttpException(
+          'Данного юзера не существует',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      const checkPath = await bcrypt.compare(userDto.password, user.password);
+
+      if (checkPath) {
+        return this.generateToken(user);
+      }
+
+      throw new HttpException('Check your password', HttpStatus.BAD_REQUEST);
+    } catch (error) {
+      console.log(error);
+      sendErrorToSentry('login error', error?.message);
     }
-
-    const checkPath = await bcrypt.compare(userDto.password, user.password);
-
-    if (checkPath) {
-      return this.generateToken(user);
-    }
-
-    throw new HttpException('Check your password', HttpStatus.BAD_REQUEST);
   }
 
   async registration(userDto: UserCreateDto) {
@@ -49,11 +55,16 @@ export class AuthService {
   }
 
   private async generateToken(user: UserModel) {
-    const payload = {
-      uuid: user.uuid,
-      login: user.login,
-    };
+    try {
+      const payload = {
+        uuid: user.uuid,
+        login: user.login,
+      };
 
-    return this.jwtService.sign(payload);
+      return this.jwtService.sign(payload);
+    } catch (error) {
+      console.log(error);
+      sendErrorToSentry('generate token error', error?.message);
+    }
   }
 }

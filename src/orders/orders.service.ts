@@ -4,6 +4,7 @@ import axios from 'axios';
 import * as dayjs from 'dayjs';
 
 import { OrdersModel } from './orders.model';
+import { sendErrorToSentry } from 'src/utils';
 
 const secret = '6918841607:AAGCWW_MGrx3K_NTN5J3WxrxpYIt3g9rhBg';
 const chatsIds = [1715992777, 323934151, 298938846, 1331115368];
@@ -44,6 +45,7 @@ export class OrdersService {
       }
     } catch (error) {
       console.log(error);
+      sendErrorToSentry('create order, PROD LEND', error.message);
     }
   }
   async updateOrder({
@@ -55,17 +57,22 @@ export class OrdersService {
     comment: string;
     complete: boolean;
   }) {
-    const order = await this.ordersRepository.findOne({ where: { id } });
+    try {
+      const order = await this.ordersRepository.findOne({ where: { id } });
 
-    if (comment != undefined) {
-      order.comment = comment;
+      if (comment != undefined) {
+        order.comment = comment;
+      }
+
+      if (complete != undefined) {
+        order.complete = complete;
+      }
+
+      await order.save();
+    } catch (error) {
+      console.log(error);
+      sendErrorToSentry('update order', error.message);
     }
-
-    if (complete != undefined) {
-      order.complete = complete;
-    }
-
-    await order.save();
   }
 
   async sendMessageToAll({ name, number, userComment, budget }) {
@@ -105,8 +112,13 @@ export class OrdersService {
   }
 
   async getAll() {
-    return this.ordersRepository.findAll({
-      order: [['createdAt', 'DESC']],
-    });
+    try {
+      return this.ordersRepository.findAll({
+        order: [['createdAt', 'DESC']],
+      });
+    } catch (error) {
+      console.log(error);
+      sendErrorToSentry('get all orders', error.message);
+    }
   }
 }

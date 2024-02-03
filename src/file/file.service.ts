@@ -1,7 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { v4 } from 'uuid';
 import * as path from 'path';
 import * as fs from 'fs';
+import { sendErrorToSentry } from 'src/utils';
 
 @Injectable()
 export class FileService {
@@ -19,7 +20,10 @@ export class FileService {
 
       return fileName;
     } catch (error) {
-      throw new HttpException('File error', HttpStatus.BAD_REQUEST);
+      console.log(error);
+      sendErrorToSentry('create file', error.message);
+
+      // throw new HttpException('File error', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -33,7 +37,10 @@ export class FileService {
       fs.rmSync(path.join(filePath, fileName));
       return;
     } catch (error) {
-      throw new HttpException('File error', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.log(error);
+      sendErrorToSentry('delete file', error.message);
+
+      // throw new HttpException('File error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }
