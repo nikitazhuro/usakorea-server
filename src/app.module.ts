@@ -22,7 +22,7 @@ import { BotUpdate } from './bot/bot.update';
       dialect: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'autosaya',
+      username: 'postgres',
       password: 'root',
       database: 'usakorea',
       models: [UserModel, OrdersModel, ReviewsModel, DeliveredCarsModel],
