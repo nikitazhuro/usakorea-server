@@ -14,10 +14,10 @@ export class AuthController {
     return this.authService.login(userDto);
   }
 
-   //@Post('registration')
- //  registration(@Body() userDto: UserCreateDto) {
- //    return this.authService.registration(userDto);
- //  }
+  @Post('registration')
+  registration(@Body() userDto: UserCreateDto) {
+     return this.authService.registration(userDto);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Get('check')
